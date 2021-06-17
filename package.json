@@ -1,0 +1,22 @@
+{
+  "name": "period-tracking-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.tu-berlin.de/my-awesome-group/period-tracking-app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.23.0",
+    "chai": "^4.3.4",
+    "graphql": "^15.5.0",
+    "nodemon": "^2.0.7"
+  }
+}
