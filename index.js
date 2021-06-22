@@ -1,5 +1,10 @@
+import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives";
 const { ApolloServer, gql, SchemaDirectiveVisitor } = require('apollo-server');
 const { defaultFieldResolver } = require('graphql');
+
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const libraries = [
   {
@@ -8,7 +13,7 @@ const libraries = [
   },
   {
     branch: 'riverside',
-    zip: 09987
+    zip: 9987
   },
 ];
 
@@ -35,6 +40,15 @@ const books = [
 const typeDefs = gql`
 directive @anony on FIELD_DEFINITION
 directive @zipsupp on FIELD_DEFINITION
+directive @isAuthenticated on OBJECT | FIELD_DEFINITION
+directive @hasRole(roles: [Role]) on OBJECT | FIELD_DEFINITION
+directive @hasScope(scopes: [String]) on OBJECT | FIELD_DEFINITION
+
+enum Role {
+  reader
+  user
+  admin
+}
 
 # A library has a branch and books
   type Library {
@@ -46,7 +60,7 @@ directive @zipsupp on FIELD_DEFINITION
   # A book has a title and author
   type Book {
     title: String!
-    author: Author!
+    author: Author! 
   }
 
   # An author has a name
@@ -56,7 +70,7 @@ directive @zipsupp on FIELD_DEFINITION
 
   # Queries can fetch a list of libraries
   type Query {
-    libraries: [Library]
+    libraries: [Library] @hasScope(scopes:["User:Read"])
   }
 `;
 
@@ -105,11 +119,17 @@ class ZipDirective extends SchemaDirectiveVisitor {
 }
 
 const server = new ApolloServer({
+  context: ({req}) => {
+    return req;
+  },
   typeDefs,
   resolvers,
   schemaDirectives: {
     anony: AnonyDirective,
     zipsupp: ZipDirective,
+    isAuthenticated: IsAuthenticatedDirective,
+    hasRole: HasRoleDirective,
+    hasScope: HasScopeDirective
   }, 
 })
 
