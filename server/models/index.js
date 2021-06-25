@@ -1,22 +1,24 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
 const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
 
-const sequelize = new Sequelize('postgres://user:password@localhost:5432/period-tracking')
+const sequelize = new Sequelize('postgres://user:password@localhost:5432/period-tracking');
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+const models = {
+  User: require("./user")(sequelize, Sequelize.DataTypes),
+  Cycle: require("./cycle")(sequelize, Sequelize.DataTypes),
+  Symptom: require("./symptom")(sequelize, Sequelize.DataTypes),
+};
+
+Object.keys(models).forEach((modelName) => {
+  if ('associate' in models[modelName]) {
+    models[modelName].associate(models);
   }
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+models.sequelize = sequelize;
+models.Sequelize = Sequelize;
 
-module.exports = db;
+//export default models;
+
+module.exports = models;

@@ -32,6 +32,10 @@ directive @zipsupp on FIELD_DEFINITION
     libraries: [Library]
     user(id: Int!): User
   }
+
+  type Mutation {
+    createUser(username: String!, firstName: String!): User! 
+  }
 `;
 
 module.exports = typeDefs;

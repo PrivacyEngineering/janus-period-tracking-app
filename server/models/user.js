@@ -5,28 +5,32 @@ module.exports = (sequalize, DataTypes) => {
             primaryKey: true,
             type: DataTypes.INTEGER
         },
-        firstName: {
+        username: {
             allowNull: false,
+            type: DataTypes.STRING
+        },
+        firstName: {
+            allowNull: true,
             type: DataTypes.STRING
         },
         email: {
-            allowNull: false,
+            allowNull: true,
             type: DataTypes.STRING
         },
         passwordHash: {
-            allowNull: false,
+            allowNull: true,
             type: DataTypes.STRING
         },
         role: {
-            allowNull: false,
+            allowNull: true,
             type: DataTypes.STRING
         },
         age: {
-            allowNull: false,
+            allowNull: true,
             type: DataTypes.INTEGER
         },
         contraceptive: {
-            allowNull: false,
+            allowNull: true,
             type: DataTypes.STRING
         }        
     });

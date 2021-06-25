@@ -54,6 +54,9 @@ const resolvers = {
   },
   User: {
 
+  },
+  Mutation:{
+    createUser: (parent, args, {models}) => models.User.create(args),
   }
 
 };
