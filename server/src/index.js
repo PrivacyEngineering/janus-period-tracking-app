@@ -1,10 +1,11 @@
 const { ApolloServer } = require('apollo-server');
-const { Sequelize } = require('sequelize');
 const models = require('../models/index');
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const {ZipDirective, AnonyDirective} = require("./directives")
 import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives";
+import { AnonymizeDirective} from "graphql-access-control";
+
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -16,7 +17,7 @@ const server = new ApolloServer({
     return {req, models}
   },
   schemaDirectives: {
-    anony: AnonyDirective,
+    anonymize: AnonymizeDirective,
     zipsupp: ZipDirective,
     isAuthenticated: IsAuthenticatedDirective,
     hasRole: HasRoleDirective,
