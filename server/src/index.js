@@ -11,13 +11,17 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+NoiseDirective.prototype.getArgumentForRole = function(){
+  //add here { role -> Arguments }
+}
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({req}) => {
     return {req, models}
   },
-  schemaDirectives: {
+  schemaDirectives: { 
     addNoise: NoiseDirective,
     zipsupp: ZipDirective,
     isAuthenticated: IsAuthenticatedDirective,
