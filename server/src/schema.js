@@ -5,7 +5,7 @@ directive @zipsupp on FIELD_DEFINITION
 directive @isAuthenticated on OBJECT | FIELD_DEFINITION
 directive @hasRole(roles: [Role]) on OBJECT | FIELD_DEFINITION
 directive @hasScope(scopes: [String]) on OBJECT | FIELD_DEFINITION
-directive @anonymize on FIELD_DEFINITION
+directive @addNoise on FIELD_DEFINITION
 
 enum Role {
   reader
@@ -33,7 +33,7 @@ enum Role {
   }
 
   type User {
-    id: Int! @anonymize
+    id: Int! @addNoise
     firstName: String!
   }
 
