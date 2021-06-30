@@ -13,6 +13,10 @@ module.exports = (sequalize, DataTypes) => {
             allowNull: true,
             type: DataTypes.STRING
         },
+        lastName: {
+            allowNull: true,
+            type: DataTypes.STRING
+        },
         email: {
             allowNull: true,
             type: DataTypes.STRING

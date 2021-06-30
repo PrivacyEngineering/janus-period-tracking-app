@@ -5,6 +5,7 @@ const resolvers = require("./resolvers");
 const {ZipDirective} = require("./directives")
 import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives";
 import { NoiseDirective } from "graphql-access-control";
+import { insertDummyData } from "./dummyData";
 
 const dotenv = require("dotenv");
 
@@ -36,6 +37,10 @@ const server = new ApolloServer({
  */
 
 models.sequelize.sync().then(_ => {
+  insertDummyData(models);
+})
+.then(_ => {
+  //console.log("server listen")
   return server.listen()}
 ).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
