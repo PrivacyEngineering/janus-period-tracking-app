@@ -18,6 +18,7 @@ class App extends React.Component {
       alert("Your age must be a number");
     }
   }
+
   myChangeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
@@ -42,6 +43,7 @@ class App extends React.Component {
       <br/>
       <br/>
       <input type='submit' />
+    
       </form>
     );
   }
