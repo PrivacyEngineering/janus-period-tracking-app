@@ -1,60 +1,78 @@
-const libraries = [
-  {
-    branch: 'downtown',
-    zip: 10781
-  },
-  {
-    branch: 'riverside',
-    zip: 9987
-  }, 
-];
 
-// The branch field of a book indicates which library has it in stock
-const books = [
+import { Kind, GraphQLScalarType } from 'graphql';
+
+const resolverMap = {
+  Date: new GraphQLScalarType({
+    name: 'Date',
+    description: 'Date custom scalar type',
+    parseValue(value) {
+      return new Date(value); // value from the client
+    },
+    serialize(value) {
+      return value.getTime(); // value sent to the client
+    },
+    parseLiteral(ast) {
+      if (ast.kind === Kind.INT) {
+        return new Date(+ast.value); // ast value is always in string format
+      }
+      return null;
+    },
+  }),
+};
+
+
+const users = [
   {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-    branch: 'downtown'
+    id: '1',
+    name: 'Elizabeth Bennet'
   },
   {
-    title: 'Hi',
-    author: 'Hello Author',
-    branch: 'riverside'
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-    branch: 'downtown'
-  },
+    id: '2',
+    name: 'Fitzwilliam Darcy'
+  }
 ];
 
 const resolvers = {
   Query: {
-    libraries() {
+    //for the  hard coded User array
+    users() {
 
-      return libraries;
+      return users;
     },
+    async allUsers(root, { id }, { models }) {
+      return models.User.findAll();
+    }, 
     async user(root, {id}, {models}) {
       return models.User.findById(id);
-    }
+    },
+    async cycle(root, args, { models }) {
+      return models.Cycle.findById(id);
+    },
+    async allSymptoms(root, { id }, { models }) {
+      return models.Symptom.findAll();
+    },
   },
-  Library: {
-    books(parent) {
 
-      return books.filter(book => book.branch === parent.branch);
-    }
-  },
-  Book: {
-
-    author(parent) {
-      return {
-        name: parent.author
-      };
-    }
-  },
   User: {
-
+    async hasCycle(user) {
+      return user.getCycle();
+    },
+    async hasSymptom(user) {
+      return user.getSymptom();
+    },
   },
+  Cycle: {
+    async user(cycle) {
+      return cycle.getUser();
+    },
+  },
+  Symptom: {
+    async user(symptom) {
+      return symptom.getUser();
+    },
+  },
+  
+
   Mutation:{
     createUser: (parent, args, {models}) => models.User.create(args),
   }
