@@ -38,6 +38,9 @@ module.exports = (sequalize, DataTypes) => {
             type: DataTypes.STRING
         }        
     });
-
+    User.associate = function(models) {    
+        User.hasMany(models.Symptom);
+        User.hasMany(models.Cycle);    
+    };
     return User;
 }
