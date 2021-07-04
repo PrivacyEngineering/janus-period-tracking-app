@@ -69,17 +69,20 @@ const dummySymptoms = [
     {
         userId: 1,
         date: new Date(2020,3,13,14,2,3),
-        symptom: "abdome pain"
+        symptom: "abdome pain",
+        pain: 4,
     },
     {
         userId: 1,
         date: new Date(2020,3,14,14,2,3),
-        symptom: "chest"
+        symptom: "chest",
+        pain: 9,
     },
     {
         userId: 2,
         date: new Date(1999,12,5,10,56,30),
-        symptom: "headache"
+        symptom: "headache",
+        pain: 5,
     },
 ]
 

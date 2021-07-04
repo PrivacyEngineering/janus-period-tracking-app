@@ -51,6 +51,7 @@ enum Role {
     id: ID!
     date: Dates
     symptom: String
+    pain: Float
   # It's required that every Symptom has a user
   # Hence the exclamation (!) to mark it as required
     hasUser: User!

@@ -13,6 +13,10 @@ module.exports = (sequalize, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING
         },
+        pain: {
+            allowNull: false,
+            type: DataTypes.FLOAT
+        },
     });
 
     Symptom.associate = (models) => {
