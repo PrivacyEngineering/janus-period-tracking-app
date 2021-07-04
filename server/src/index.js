@@ -11,7 +11,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-NoiseDirective.prototype.getArgumentForRole = function(){
+NoiseDirective.prototype.getArgumentForRoles = function(){
   //add here { role -> Arguments }
 }
 
