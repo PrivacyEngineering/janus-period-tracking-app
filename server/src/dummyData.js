@@ -92,17 +92,31 @@ const insertDummyData = async function(models) {
         })
     }
 
+    for (const c of dummyCycles){
+        await models.Cycle.count({where: {userId: c.userId}})
+        .then(count => {
+          if(count == 0) models.Cycle.create(c);
+        })
+    }
+
+     for (const s of dummySymptoms){
+        await models.Symptom.count({where: {symptom: s.symptom}})
+        .then(count => {
+          if(count == 0) models.Symptom.create(s);
+        })
+    }
+    /*
     if(models.Cycle.count() == 0){
         for (const c of dummyCycles){
             models.Cycle.create(c)
         }
-    }
+    } 
 
-    if(models.Symptom.count() == 0){
+    if(models.Symptom.count == 0){
         for (const s of dummySymptoms){
             models.Symptom.create(s)
         }
-    }
+    }*/
 }
 
 exports.insertDummyData = insertDummyData
