@@ -12,6 +12,9 @@ Start DB:
 Debug into DB: 
 ```docker exec -it period-tracking-db psql -d period-tracking -U user```
 
+Remove DB:
+``` docker rm -f period-tracking-db```
+
 ## Install other local packages
 Run ```npm link``` in the folder that contains the ```anonymizer``` project. 
 
