@@ -1,6 +1,5 @@
-
-import { Kind, GraphQLScalarType } from 'graphql';
-
+/* 
+const { GraphQLScalarType, Kind } = require('graphql');
 const resolverMap = {
   Date: new GraphQLScalarType({
     name: 'Date',
@@ -18,65 +17,44 @@ const resolverMap = {
       return null;
     },
   }),
-};
+};  */
+
+ 
 
 
-const users = [
-  {
-    id: '1',
-    name: 'Elizabeth Bennet'
-  },
-  {
-    id: '2',
-    name: 'Fitzwilliam Darcy'
-  }
-];
 
 const resolvers = {
+  /* Date: resolverMap, */
   Query: {
-    //for the  hard coded User array
-    users() {
-
-      return users;
-    },
-    async allUsers(root, { id }, { models }) {
-      return models.User.findAll();
-    }, 
-    async user(root, {id}, {models}) {
-      return models.User.findById(id);
-    },
-    async cycle(root, args, { models }) {
-      return models.Cycle.findById(id);
-    },
-    async allSymptoms(root, { id }, { models }) {
-      return models.Symptom.findAll();
-    },
+    getUser: (parent, { id }, { models }) => models.User.findOne({ where: { id } }),
+    allUsers: (parent, args, { models }) => models.User.findAll(),
+    getSymptom: (parent, { id }, { models }) => models.Symptom.findOne({ where: { id } }),
+    allSymptoms:(parent, args,  { models })  => models.Symptom.findAll(),
+    /*  async getSymptom (root, { id }, { models }) {
+      return models.Symptom.findByPk(id)
+    },  */
+    getCycle: (parent, { id }, { models }) => models.Cycle.findOne({ where: { id } }),
+    allCycles:(parent, args,  { models })  => models.Cycle.findAll()
   },
-
-  User: {
-    async hasCycle(user) {
-      return user.getCycle();
-    },
+  //getter for User, useing Sequelize mixin to return data
+  User: {
     async hasSymptom(user) {
-      return user.getSymptom();
+      return user.getSymptoms()
     },
-  },
-  Cycle: {
-    async user(cycle) {
-      return cycle.getUser();
-    },
+    async hasCycle(user) {
+      return user.getCycles()
+    }
   },
   Symptom: {
-    async user(symptom) {
-      return symptom.getUser();
-    },
+     async hasUser(symptom) {
+      return symptom.getUser()
+    }
   },
-  
-
-  Mutation:{
-    createUser: (parent, args, {models}) => models.User.create(args),
-  }
-
+  Cycle: {
+    async hasUser(cycle) {
+     return cycle.getUser()
+   }
+ }
 };
 
 module.exports = resolvers;
