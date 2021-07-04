@@ -17,9 +17,7 @@ module.exports = (sequalize, DataTypes) => {
 
     Cycle.associate = (models) => {
         Cycle.belongsTo(models.User, {
-            foreignKey: {
-                name: "userId",
-            }
+            foreignKey: 'userId'
         })
     }
 
