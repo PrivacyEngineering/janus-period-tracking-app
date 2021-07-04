@@ -17,9 +17,7 @@ module.exports = (sequalize, DataTypes) => {
 
     Symptom.associate = (models) => {
         Symptom.belongsTo(models.User, {
-            foreignKey: {
-                name: "userId",
-            }
+            foreignKey: 'userId'
         })
     }
 
