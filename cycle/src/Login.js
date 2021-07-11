@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { login, getCurrentPath } from './utils/auth'
 import { withHostname } from './utils/ctxWrapper'
+import { gql, graphql } from 'react-apollo'
 import Register from './Register';
 
 
@@ -9,6 +10,11 @@ function Login ({ hostname }) {
   const [userData, setUserData] = useState({ username: '', password: '', error: '' })
 
   async function handleSubmit (event) {
+   
+    const response = await this.props.mutate({
+      variable: this.state,
+    });
+    console.log(response);
     event.preventDefault()
     setUserData({
       ...userData,
@@ -92,4 +98,15 @@ function Login ({ hostname }) {
         <a href="/register">Register</a>
       </div>
       )}
+
+
+
+const mutation = gql`
+mutation($username: String!, $passwordHash: String) {
+	login(username: $username, password: $password) {
+	  id
+	} 
+}
+`;
+
 export default withHostname(Login)

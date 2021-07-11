@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { gql, graphql } from 'react-apollo';
+import { Button, Input, Checkbox } from 'antd';
+
 
 class Register extends React.Component {
   state = {
@@ -60,7 +62,7 @@ class Register extends React.Component {
     );
   }
 }
-
+/*
 const mutation = gql`
 mutation($username: String!, $email: String!, $password: String!, $isAdmin: Boolean) {
 	register(username: $username, email: $email, password: $password, isAdmin: $isAdmin) {
@@ -68,5 +70,5 @@ mutation($username: String!, $email: String!, $password: String!, $isAdmin: Bool
 	} 
 }
 `;
-
-export default graphql(mutation)(Register);
+*/
+export default Register;
