@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 export const createTokens = async (user, secret) => {
   const createToken = jwt.sign(
     {
-      user: _.pick(user, ['id', 'isAdmin']),
+      user: _.pick(user, ['name', 'role']),
     },
     secret,
     {
@@ -15,7 +15,7 @@ export const createTokens = async (user, secret) => {
 
   const createRefreshToken = jwt.sign(
     {
-      user: _.pick(user, 'id'),
+      user: _.pick(user, ['name', 'role']),
     },
     secret,
     {
@@ -45,7 +45,7 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
   };
 };
 
-export const tryLogin = async (email, password, models, SECRET) => {
+export const tryLogin = async (name, password, models, SECRET) => {
   const localAuth = await models.LocalAuth.findOne({ where: { email }, raw: true });
   if (!localAuth) {
     // user with provided email not found

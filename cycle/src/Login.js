@@ -2,64 +2,28 @@ import React, { useState } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { login, getCurrentPath } from './utils/auth'
 import { withHostname } from './utils/ctxWrapper'
-import { gql, graphql } from 'react-apollo'
+import {graphql } from 'react-apollo'
 import Register from './Register';
 
+const { gql } = require('apollo-client')
 
-function Login ({ hostname }) {
-  const [userData, setUserData] = useState({ username: '', password: '', error: '' })
-
-  async function handleSubmit (event) {
-   
-    const response = await this.props.mutate({
-      variable: this.state,
-    });
-    console.log(response);
-    event.preventDefault()
-    setUserData({
-      ...userData,
-      error: ''
-    })
-
-
-    const { username, password } = userData
-    const url = `${hostname}/login`
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache'
-        },
-        body: JSON.stringify({ username, password })
-      })
-      if (response.status === 200) {
-        const { jwt_token, jwt_token_expiry } = await response.json()
-        await login({ jwt_token, jwt_token_expiry })
-      } else {
-        console.log('Login failed.')
-        // https://github.com/developit/unfetch#caveats
-        let error = new Error(response.statusText)
-        error.response = response
-        throw error
-      }
-    } catch (error) {
-      console.error(
-        'You have an error in your code or there are Network issues.',
-        error
-      )
-
-      const { response } = error
-      setUserData(
-        Object.assign({}, userData, {
-          error: response ? response.statusText : error.message
-        })
-      )
-    }
+class Login extends React.Component {
+  state = {
+    username: '',
+    password: '',
   }
 
+
+  onSubmit = async () => {
+    const response = await this.props.mutate({
+      variables: this.state,
+    });
+    const {token, refreshToken} = response.data.login;
+    localStorage.setItem('token', token);
+    localStorage.setItem('refreshToken', token);
+    console.log(response);
+  }
+  render() {
   return (
 
       <div className='login'>
@@ -98,15 +62,16 @@ function Login ({ hostname }) {
         <a href="/register">Register</a>
       </div>
       )}
-
+          }
 
 
 const mutation = gql`
 mutation($username: String!, $passwordHash: String) {
 	login(username: $username, password: $password) {
-	  id
-	} 
+    token
+    refresToken
+  } 
 }
 `;
 
-export default withHostname(Login)
+export default graphql(mutation)(Login);
