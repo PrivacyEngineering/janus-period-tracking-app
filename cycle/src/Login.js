@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { login, getCurrentPath } from './utils/auth'
 import { withHostname } from './utils/ctxWrapper'
+import Register from './Register';
 
 
 function Login ({ hostname }) {
@@ -16,7 +17,7 @@ function Login ({ hostname }) {
 
 
     const { username, password } = userData
-    const url = `${hostname}/api/login`
+    const url = `${hostname}/login`
 
     try {
       const response = await fetch(url, {
