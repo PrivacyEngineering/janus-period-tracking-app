@@ -11,23 +11,45 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-NoiseDirective.prototype.getArgumentForRoles = function(){
-  //add here { role -> Arguments }
+NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info){
+    const m = new Map();
+    m.set(("Researcher, Symptom.pain"), {
+        typeOfDistribution:"normal", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 1,
+        }, 
+        valueParameters:{
+            isInt: false,
+        }
+    });
+    m.set(("Advertiser, Symptom.pain"), {
+        typeOfDistribution:"normal", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 2,
+        }, 
+        valueParameters:{
+            isInt: true,
+        }
+    })
+
+    return m.get(role + ", " + info.parentType.name + "."+ info.fieldName);
 }
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: ({req}) => {
-    return {req, models}
-  },
-  schemaDirectives: { 
-    addNoise: NoiseDirective,
-    zipsupp: ZipDirective,
-    isAuthenticated: IsAuthenticatedDirective,
-    hasRole: HasRoleDirective,
-    hasScope: HasScopeDirective
-  }, 
+    typeDefs,
+    resolvers,
+    context: ({req}) => {
+        return {req, models}
+    },
+    schemaDirectives: { 
+        addNoise: NoiseDirective,
+        zipsupp: ZipDirective,
+        isAuthenticated: IsAuthenticatedDirective,
+        hasRole: HasRoleDirective,
+        hasScope: HasScopeDirective
+    }, 
 })
 
 /**
@@ -41,11 +63,11 @@ const server = new ApolloServer({
  */
 
 models.sequelize.sync().then(_ => {
-  insertDummyData(models);
+    insertDummyData(models);
 })
 .then(_ => {
-  //console.log("server listen")
-  return server.listen()}
+    //console.log("server listen")
+    return server.listen()}
 ).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+    console.log(`🚀  Server ready at ${url}`);
 })
