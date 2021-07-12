@@ -57,6 +57,11 @@ enum Role {
   # Hence the exclamation (!) to mark it as required
     hasUser: User!
   }
+  type AuthPayload {
+    token: String!
+    refreshToken: String!
+  }
+
 
 
   # Query type defines the available queries for clients to execute
@@ -74,7 +79,7 @@ enum Role {
 
   type Mutation {
     #register(username: String!, password: String!): User!
-    login(email: String!, password: String!): AuthPayload!
+    login(name: String!, password: String!): AuthPayload!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
   
   }

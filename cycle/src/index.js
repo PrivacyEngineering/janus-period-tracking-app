@@ -3,16 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Login from './Login';
-import {BrowserRouter, Route, Switch, Link} from "react-router-dom"
+import Register from './Register';
+import {BrowserRouter, Route, Switch} from "react-router-dom"
 import {
   ApolloClient,
   InMemoryCache,
-  ApolloProvider,
-  useQuery,
   ApolloLink,
   concat,
-  HttpLink,
-  gql
+  HttpLink
 } from "@apollo/client";
 let appJWTToken 
 const httpLink = new HttpLink({uri: 'http://localhost:4000/graphql'})

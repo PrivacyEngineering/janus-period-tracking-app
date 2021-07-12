@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import {graphql } from 'react-apollo'
 import Register from './Register';
+import { gql, graphql } from 'react-apollo';
+//import { gql, useMutation } from '@apollo/client';
 
-const { gql } = require('apollo-client')
 
 class Login extends React.Component {
   state = {
@@ -52,7 +52,7 @@ class Login extends React.Component {
 
           <button type='submit'>Login</button>
 
-          {userData.error && <p className='error'>Error</p>}
+          {<p className='error'>Error</p>}
         </form>
         <a href="/register">Register</a>
       </div>
