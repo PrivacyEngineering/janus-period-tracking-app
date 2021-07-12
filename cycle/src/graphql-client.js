@@ -8,10 +8,10 @@ import {
   HttpLink,
   gql
 } from "@apollo/client";
-import reportWebVitals from './reportWebVitals';
-let appJWTToken
-const httpLink = new HttpLink({uri: 'https://graphql-jwt-tutorial.herokuapp.com/v1/graphql'})
+let appJWTToken 
+const httpLink = new HttpLink({uri: 'http://localhost:4000/graphql'})
 const authMiddleware = new ApolloLink((operation, forward)=> {
+//if in local storage
 if (appJWTToken) {
   operation.setContext({
   headers: {

@@ -1,7 +1,4 @@
 import React, { useState } from 'react'
-import fetch from 'isomorphic-unfetch'
-import { login, getCurrentPath } from './utils/auth'
-import { withHostname } from './utils/ctxWrapper'
 import {graphql } from 'react-apollo'
 import Register from './Register';
 
@@ -13,8 +10,13 @@ class Login extends React.Component {
     password: '',
   }
 
+  onChange = (e) => {
+    this.setState({
+        [e.target.name]: e.target.value,
+      });
+    }
 
-  onSubmit = async () => {
+  handleSubmit = async () => {
     const response = await this.props.mutate({
       variables: this.state,
     });
@@ -22,42 +24,35 @@ class Login extends React.Component {
     localStorage.setItem('token', token);
     localStorage.setItem('refreshToken', token);
     console.log(response);
+
   }
   render() {
   return (
 
       <div className='login'>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={this.handleSubmit()}>
           <label htmlFor='username'>Login</label>
 
           <input
             type='text'
             id='username'
             name='username'
-            value={userData.username}
-            onChange={event =>
-              setUserData({
-                ...userData,
-                username: event.target.value
-              })
+            value={this.state.username}
+            onChange={e => this.onChange(e)
             }
           />
           <input
             type='password'
             id='password'
             name='password'
-            value={userData.password}
-            onChange={event =>
-              setUserData({
-                ...userData,
-                password: event.target.value
-              })
+            value={this.state.password}
+            onChange={e => this.onChange(e)
             }
           />
 
           <button type='submit'>Login</button>
 
-          {userData.error && <p className='error'>Error: {userData.error}</p>}
+          {userData.error && <p className='error'>Error</p>}
         </form>
         <a href="/register">Register</a>
       </div>
@@ -69,7 +64,7 @@ const mutation = gql`
 mutation($username: String!, $passwordHash: String) {
 	login(username: $username, password: $password) {
     token
-    refresToken
+    refreshToken
   } 
 }
 `;
