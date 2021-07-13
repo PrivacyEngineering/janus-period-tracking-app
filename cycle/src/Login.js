@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Register from './Register';
-import { gql, graphql } from 'react-apollo';
-//import { gql, useMutation } from '@apollo/client';
+import { graphql } from 'react-apollo';
+import { gql, useMutation } from '@apollo/client';
 
 
 class Login extends React.Component {

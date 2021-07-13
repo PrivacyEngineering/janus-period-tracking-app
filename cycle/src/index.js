@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import Login from './Login';
 import Register from './Register';
+import { ApolloProvider } from "@apollo/react-hooks";
 import {BrowserRouter, Route, Switch} from "react-router-dom"
 import {
   ApolloClient,
@@ -26,7 +27,7 @@ if (appJWTToken) {
   return forward(operation);
 })
 
-const apolloClient = new ApolloClient({
+const client = new ApolloClient({
   link: concat(authMiddleware, httpLink),
   cache: new InMemoryCache(),
 });
@@ -40,7 +41,7 @@ export default () => (
   </BrowserRouter>
 );
 ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<Login />, document.getElementById('root2'));
+ReactDOM.render(<ApolloProvider client={client}><Login /></ApolloProvider>, document.getElementById('root2'));
 //ReactDOM.render(<div><Link to = "/login"><button>Login</button></Link></div>, document.getElementById('root2'));
 
 /* ReactDOM.render(
