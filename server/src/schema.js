@@ -1,11 +1,12 @@
 const { gql } = require('apollo-server')
 
 const typeDefs = gql`
-directive @zipsupp on FIELD_DEFINITION
 directive @isAuthenticated on OBJECT | FIELD_DEFINITION
 directive @hasRole(roles: [Role]) on OBJECT | FIELD_DEFINITION
 directive @hasScope(scopes: [String]) on OBJECT | FIELD_DEFINITION
 directive @addNoise on FIELD_DEFINITION
+directive @generalize on FIELD_DEFINITION
+
 scalar Dates
 enum Role {
   reader
@@ -39,7 +40,7 @@ enum Role {
   # A cycle has an id, start and end Date and required to have a user
   type Cycle {
     id: ID!
-    start: Dates
+    start: Dates @addNoise
     end: Dates
   # It's required that every cycle has a user
   # Hence the exclamation (!) to mark it as required
@@ -50,7 +51,7 @@ enum Role {
   type Symptom{
     id: ID!
     date: Dates
-    symptom: String
+    symptom: String @generalize
     pain: Float @addNoise
   # It's required that every Symptom has a user
   # Hence the exclamation (!) to mark it as required

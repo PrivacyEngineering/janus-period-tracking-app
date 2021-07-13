@@ -2,9 +2,8 @@ const { ApolloServer } = require('apollo-server');
 const models = require('../models/index');
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
-const {ZipDirective} = require("./directives")
 import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives";
-import { NoiseDirective } from "graphql-access-control";
+import { NoiseDirective, GeneralizationDirective } from "graphql-access-control";
 import { insertDummyData } from "./dummyData";
 
 const dotenv = require("dotenv");
@@ -14,7 +13,7 @@ dotenv.config();
 NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info){
     const m = new Map();
     m.set(("Researcher, Symptom.pain"), {
-        typeOfDistribution:"normal", 
+        typeOfDistribution: "normal", 
         distributionParameters:{
             mean: 0,
             standardDeviation: 1,
@@ -24,7 +23,7 @@ NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args
         }
     });
     m.set(("Advertiser, Symptom.pain"), {
-        typeOfDistribution:"normal", 
+        typeOfDistribution: "normal", 
         distributionParameters:{
             mean: 0,
             standardDeviation: 2,
@@ -32,9 +31,35 @@ NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args
         valueParameters:{
             isInt: true,
         }
+    });
+    m.set(("Researcher, Cycle.start"),{
+        typeOfDistribution: "laplace", 
+        distributionParameters:{
+            mean: 1,
+            standardDeviation: 1.5,
+        }, 
+        valueParameters: {
+            addNoiseToUnit: "day"
+        }
     })
+    var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
+    return m.get(lookup);
+}
 
-    return m.get(role + ", " + info.parentType.name + "."+ info.fieldName);
+GeneralizationDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info) {
+    const m = new Map();
+    m.set(("Researcher, Symptom.symptom"), {
+        generalizationParameters: {
+            hideCharactersFromPosition: 4,
+        }
+    });
+    m.set(("Advertiser, Symptom.symptom"), {
+        generalizationParameters: {
+            hideCharactersFromPosition: 2,
+        }
+    });
+    var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
+    return m.get(lookup);
 }
 
 const server = new ApolloServer({
@@ -44,8 +69,8 @@ const server = new ApolloServer({
         return {req, models}
     },
     schemaDirectives: { 
+        generalize: GeneralizationDirective,
         addNoise: NoiseDirective,
-        zipsupp: ZipDirective,
         isAuthenticated: IsAuthenticatedDirective,
         hasRole: HasRoleDirective,
         hasScope: HasScopeDirective

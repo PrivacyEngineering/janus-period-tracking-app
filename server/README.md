@@ -28,3 +28,5 @@ Run ```npm link graphql-access-control``` where you want to link this package.
 Researcher: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiUmVzZWFyY2hlciJ9.8sHsYNN3jhMF_ZHiYmsV4HXg0U9RdA58SatsQFRNDxo
 
 Advertiser: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiQWR2ZXJ0aXNlciJ9.Ey1wKGi0d9j_5xK8KLmV46RVxhZen2Li6HVbNPqlN1c
+
+User: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiVXNlciJ9.zwmogyzSgQkpVYpR90g84yv6mgJrpgkKpJtftDSBYC4
