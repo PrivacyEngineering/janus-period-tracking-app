@@ -54,7 +54,15 @@ const resolvers = {
     async hasUser(cycle) {
      return cycle.getUser()
    }
- }
+ },
+ Mutation: {
+  login: async (parent, { name, password }, { models, SECRET }) =>
+    tryLogin(name, password, models, SECRET),
+  
+  refreshTokens: (parent, { token, refreshToken }, { models, SECRET }) =>
+    refreshTokens(token, refreshToken, models, SECRET),
+} 
+
 };
 
 module.exports = resolvers;

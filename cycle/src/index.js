@@ -1,19 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import Login from './Login';
-import reportWebVitals from './reportWebVitals';
+import './componment/App.css';
+import App from './componment/App';
 
+import reportWebVitals from './componment/reportWebVitals';
 
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<Login />, document.getElementById('root2'));
-/* ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+ReactDOM.render(
+  <BrowserRouter>
+      <App />
+  </BrowserRouter>
+  , document.getElementById('root')
 );
- */
 reportWebVitals();

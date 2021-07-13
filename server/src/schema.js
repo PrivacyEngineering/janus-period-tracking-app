@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server')
-
+/* import { refreshTokens, tryLogin } from './auth'; */
 const typeDefs = gql`
 directive @zipsupp on FIELD_DEFINITION
 directive @isAuthenticated on OBJECT | FIELD_DEFINITION
@@ -69,13 +69,23 @@ enum Role {
     getSymptom(id: Int!): Symptom!
     allSymptoms: [Symptom!]!
   }
+  type AuthPayload {
+    token: String!
+    refreshToken: String!
+  }
 
+  type Mutation {
+    #register(username: String!, password: String!): User!
+    login(email: String!, password: String!): AuthPayload!
+    refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+  
+  }
 
-  #type Mutation {
-    # TODO add rest of the fields
-  #  createUser(username: String!, email: String!, passwordHash: String!): User!
-#  }
+ 
+
 `
 ;
 
 module.exports = typeDefs;
+
+ 
