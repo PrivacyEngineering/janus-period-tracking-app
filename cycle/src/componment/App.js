@@ -5,45 +5,13 @@ import Login from './Login';
 import User from './User';
 import logo from './cycle.png';
 import footer from './footer.png';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/react-hooks';
+import {  Route, Switch } from 'react-router-dom';
+
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar'
-import {
-  ApolloClient,
-  InMemoryCache,
-  useQuery,
-  ApolloLink,
-  concat,
-  HttpLink,
-  gql
-} from "@apollo/client";
-
-let appJWTToken 
-const httpLink = new HttpLink({uri: 'http://localhost:4000/graphql'})
-const authMiddleware = new ApolloLink((operation, forward)=> {
-//if in local storage
-if (appJWTToken) {
-  operation.setContext({
-  headers: {
-    Authorization: `Bearer ${appJWTToken}`
-  }
-});
-}
-  return forward(operation);
-})
-
-const client = new ApolloClient({
-  link: concat(authMiddleware, httpLink),
-  cache: new InMemoryCache(),
-});
 
 
-class App extends React.Component {
-
-  render() {
-    return (
-      <ApolloProvider client={client}>
+const App = () => (
       <div className="app">
         <div className="container">
           <div className="menue">
@@ -69,20 +37,18 @@ class App extends React.Component {
             <img id="second" src={footer} alt="footer" />
           </div>
 
-          
           <Switch>
             <Route exact path="/home" component={Home}  />
             <Route exact path="/login" component={Login} render={props => <Login {...props} />} />
             <Route path="/user" component={User} />
           </Switch>
-         
-
         </div>
       </div>
      
-      </ApolloProvider>
-    );
-  }
-}
+   
+     
+);
+
+
 
 export default App;
