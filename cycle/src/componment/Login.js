@@ -12,7 +12,7 @@ function Login({ props }) {
   }
 
 
-  function handleSubmit (){
+  /* function handleSubmit (){
     const response = props.mutate({
       variables: state
     });
@@ -21,21 +21,18 @@ function Login({ props }) {
     localStorage.setItem('refreshToken', token);
     console.log(response);
 
-  }
+  } 
+  
+  onSubmit={handleSubmit()}*/
   
     
-    
-
-  
-
- 
     return (
   
 
 <div className='content'>   
     <div className="login">
 
-      <form onSubmit={handleSubmit()}>
+      <form >
         <h3>Log in</h3>
 
         <div className="form-group">
@@ -48,14 +45,12 @@ function Login({ props }) {
             type='text'
             id='username'
             name='username'
-            value={this.state.username}
+            value={state.username}
           
           />
         </div>
 
         <div className="form-group">
-
-  
 
           <input
             className="form-control"
@@ -63,7 +58,7 @@ function Login({ props }) {
             type='password'
             id='password'
             name='password'
-            value={this.state.password}
+            value={state.password}
           
           />
         </div>
@@ -81,7 +76,7 @@ function Login({ props }) {
   )
 }
 
-const mutation = gql`
+/* const mutation = gql`
 
 mutation LoginMutation($username: String!, $passwordHash: String) {
 
@@ -90,7 +85,7 @@ mutation LoginMutation($username: String!, $passwordHash: String) {
     refreshToken
   } 
 }
-`;  
+`;   graphql(mutation)*/
 
-export default graphql(mutation)(Login);
+export default (Login);
 
