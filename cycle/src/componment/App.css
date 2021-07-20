@@ -1,4 +1,6 @@
-
+body{
+    background: linear-gradient( #ebebeb 0%, #adadad 100%) fixed;
+}
 .container { 
     height:100vh; 
     max-width: -webkit-fit-content !important;
@@ -12,7 +14,7 @@
     "menue menue menue image" 
     "content content content image" 
     "footer footer footer footer" ; 
-    background: linear-gradient( #ebebeb 0%, #adadad 100%) fixed;
+    
   
  
 }

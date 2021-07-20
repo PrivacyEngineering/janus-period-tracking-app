@@ -16,18 +16,31 @@ class Login extends React.Component {
       });
     }
 
-    onSubmit = async () => {
+    handleSubmit = async () => {
     const response = await this.props.mutate({
       variables: this.state,
     });
     const {token, refreshToken} = response.data.login;
     localStorage.setItem('token', token);
     localStorage.setItem('refreshToken', token);
-    console.log(response); 
+    console.log(response);
 
   }
-  render() {
-  return (
+
+  onSubmit={handleSubmit()}*/
+
+
+    return (
+
+
+<div className='content'>
+    <div className="login">
+
+      <form >
+        <h3>Log in</h3>
+
+        <div className="form-group">
+          <label htmlFor='username'></label>
 
       <div className='login'>
         <form>
@@ -37,17 +50,19 @@ class Login extends React.Component {
             type='text'
             id='username'
             name='username'
-            value={this.state.username}
-            onChange={e => this.onChange(e)
-            }
+            value={state.username}
+
           />
+        </div>
+
+        <div className="form-group">
+
           <input
             type='password'
             id='password'
             name='password'
-            value={this.state.password}
-            onChange={e => this.onChange(e)
-            }
+            value={state.password}
+
           />
 
           <Button onClick={() => this.onSubmit()} type="primary">Login</Button>
@@ -59,14 +74,17 @@ class Login extends React.Component {
       )}
           }
 
+const mutation = gql`
+
+mutation LoginMutation($username: String!, $passwordHash: String) {
 
 const mutation = gql`
 mutation($username: String!, $password: String!) {
 	login(username: $username, password: $password) {
     token
     refreshToken
-  } 
+  }
 }
-`;
+`;   graphql(mutation)*/
 
-export default graphql(mutation)(Login);
+export default (Login);
