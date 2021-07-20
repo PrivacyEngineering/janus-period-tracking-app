@@ -11,6 +11,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+//const SECRET = process.env;
+const SECRET = 'aslkdjlkaj10830912039jlkoaiuwerasdjflkasd';
 NoiseDirective.prototype.getArgumentForRoles = function(){
   //add here { role -> Arguments }
 }
@@ -19,7 +21,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({req}) => {
-    return {req, models}
+    return {req, models, SECRET}
   },
   schemaDirectives: { 
     addNoise: NoiseDirective,
@@ -48,4 +50,5 @@ models.sequelize.sync().then(_ => {
   return server.listen()}
 ).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
+  console.log(SECRET)
 })
