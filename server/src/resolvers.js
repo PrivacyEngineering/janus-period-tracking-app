@@ -1,42 +1,12 @@
-/* 
-const { GraphQLScalarType, Kind } = require('graphql');
-const resolverMap = {
-  Date: new GraphQLScalarType({
-    name: 'Date',
-    description: 'Date custom scalar type',
-    parseValue(value) {
-      return new Date(value); // value from the client
-    },
-    serialize(value) {
-      return value.getTime(); // value sent to the client
-    },
-    parseLiteral(ast) {
-      if (ast.kind === Kind.INT) {
-        return new Date(+ast.value); // ast value is always in string format
-      }
-      return null;
-    },
-  }),
-};  */
-
- 
-
-
-
 const resolvers = {
-  /* Date: resolverMap, */
   Query: {
     getUser: (parent, { id }, { models }) => models.User.findOne({ where: { id } }),
     allUsers: (parent, args, { models }) => models.User.findAll(),
     getSymptom: (parent, { id }, { models }) => models.Symptom.findOne({ where: { id } }),
-    allSymptoms:(parent, args,  { models })  => models.Symptom.findAll(),
-    /*  async getSymptom (root, { id }, { models }) {
-      return models.Symptom.findByPk(id)
-    },  */
+    allSymptoms: (parent, { limit },  { models })  => {console.log("Here"); return models.Symptom.findAll({limit: limit})},
     getCycle: (parent, { id }, { models }) => models.Cycle.findOne({ where: { id } }),
     allCycles:(parent, args,  { models })  => models.Cycle.findAll()
   },
-  //getter for User, useing Sequelize mixin to return data
   User: {
     async hasSymptom(user) {
       return user.getSymptoms()

@@ -1,11 +1,9 @@
 const { gql } = require('apollo-server')
 
 const typeDefs = gql`
-directive @isAuthenticated on OBJECT | FIELD_DEFINITION
-directive @hasRole(roles: [Role]) on OBJECT | FIELD_DEFINITION
-directive @hasScope(scopes: [String]) on OBJECT | FIELD_DEFINITION
-directive @addNoise on FIELD_DEFINITION
+directive @noise on FIELD_DEFINITION
 directive @generalize on FIELD_DEFINITION
+directive @hash on FIELD_DEFINITION
 
 scalar Dates
 enum Role {
@@ -18,8 +16,8 @@ enum Role {
 # A User 
   type User {
     id: ID! 
-    username: String!
-    firstName: String
+    username: String! 
+    firstName: String 
     lastName: String
     email: String
     passwordHash: String
@@ -40,7 +38,7 @@ enum Role {
   # A cycle has an id, start and end Date and required to have a user
   type Cycle {
     id: ID!
-    start: Dates @addNoise
+    start: Dates
     end: Dates
   # It's required that every cycle has a user
   # Hence the exclamation (!) to mark it as required
@@ -50,9 +48,9 @@ enum Role {
   # A symptom has an id, date of that the symptom appeared and required to have a user
   type Symptom{
     id: ID!
-    date: Dates
-    symptom: String @generalize
-    pain: Float @addNoise
+    date: Dates @generalize
+    symptom: String @hash
+    pain: Float @noise
   # It's required that every Symptom has a user
   # Hence the exclamation (!) to mark it as required
     hasUser: User!
@@ -68,7 +66,7 @@ enum Role {
     #[User!] means that it's okay for a user not to have a Cycle, but if she/he does have, it must be of type Cycle
     allCycles: [Cycle!]!
     getSymptom(id: Int!): Symptom!
-    allSymptoms: [Symptom!]!
+    allSymptoms(limit: Int!): [Symptom!]!
   }
 
 

@@ -30,3 +30,20 @@ Researcher: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiUmVzZWF
 Advertiser: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiQWR2ZXJ0aXNlciJ9.Ey1wKGi0d9j_5xK8KLmV46RVxhZen2Li6HVbNPqlN1c
 
 User: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiVXNlciJ9.zwmogyzSgQkpVYpR90g84yv6mgJrpgkKpJtftDSBYC4
+
+# Azure
+
+## Deploy Database
+Login: ```az login```
+
+Create: ```az postgres server create --resource-group PEng --name dbpeng2  --location westeurope --admin-user myadmin --admin-password VjYK5YcGMswGU7FFd9hfy6kpYm8267XquSMSusaV --sku-name GP_Gen5_2``` 
+
+Firewall: ``` az postgres server firewall-rule create --resource-group PEng --server dbpeng2 --name AllowIP --start-ip-address 0.0.0.0 --end-ip-address 255.255.255.255 ```
+
+```az postgres server update --resource-group PEng --name dbpeng2 --ssl-enforcement Disabled```
+
+Connection-String: postgres://myadmin@dbpeng2:VjYK5YcGMswGU7FFd9hfy6kpYm8267XquSMSusaV@dbpeng2.postgres.database.azure.com:5432/postgres
+```psql --host=dbpeng2.postgres.database.azure.com --port=5432 --username=myadmin@dbpeng2 --dbname=postgres```
+
+Delete: ``` az postgres server delete --resource-group PEng --name dbpeng2 ```
+

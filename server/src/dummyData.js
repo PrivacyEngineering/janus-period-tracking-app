@@ -1,3 +1,5 @@
+const faker = require("faker");
+
 const dummyUsers = [
     {
         username:"szuboff", 
@@ -87,39 +89,76 @@ const dummySymptoms = [
 ]
 
 const insertDummyData = async function(models) {
-    //console.log("insertDummy")
-    for (const u of dummyUsers){
+    for (const u of getDummyUsers()){
+        if(await models.User.count()>2000) break;
         await models.User.count({where: {username: u.username}})
         .then(count => {
           if(count == 0) models.User.create(u);
         })
     }
 
-    for (const c of dummyCycles){
-        await models.Cycle.count({where: {userId: c.userId}})
-        .then(count => {
-          if(count == 0) models.Cycle.create(c);
-        })
+    for (const c of getDummyCycles()){
+        if(await models.Cycle.count()>20000) break;
+        models.Cycle.create(c);
     }
 
-     for (const s of dummySymptoms){
-        await models.Symptom.count({where: {symptom: s.symptom}})
-        .then(count => {
-          if(count == 0) models.Symptom.create(s);
-        })
+     for (const s of getDummySymptoms()){
+        if(await models.Symptom.count()>20000) break;
+        models.Symptom.create(s);
     }
-    /*
-    if(models.Cycle.count() == 0){
-        for (const c of dummyCycles){
-            models.Cycle.create(c)
-        }
-    } 
-
-    if(models.Symptom.count == 0){
-        for (const s of dummySymptoms){
-            models.Symptom.create(s)
-        }
-    }*/
 }
 
 exports.insertDummyData = insertDummyData
+
+function getDummyUsers(){
+    var r = new Array();
+
+    for (let i = 0; i < 2000; i++) {
+        r.push(
+            {
+                username:faker.internet.userName(), 
+                firstName:faker.name.firstName(), 
+                lastName: faker.name.lastName(), 
+                email:faker.internet.email(), 
+                role:"User", 
+                age: faker.datatype.number({min: 10, max: 99}), 
+                contraceptive: faker.lorem.word()
+            }
+        )
+    }
+    
+    return r;
+}
+
+function getDummyCycles(){
+    var r = new Array();
+
+    for (let i = 0; i < 20000; i++) {
+        r.push(
+            {
+                userId: faker.datatype.number({min: 1, max: 2000}), 
+                start: faker.datatype.datetime(),
+                end: faker.datatype.datetime()
+            }
+        )
+    }
+    
+    return r;
+}
+
+function getDummySymptoms(){
+    var r = new Array();
+
+    for (let i = 0; i < 20000; i++) {
+        r.push(
+            {
+                userId: faker.datatype.number({min: 1, max: 2000}),
+                date: faker.datatype.datetime(),
+                symptom: faker.lorem.word(),
+                pain: faker.datatype.float({min:0, max:10}),
+            }
+        )
+    }
+    
+    return r;
+}
