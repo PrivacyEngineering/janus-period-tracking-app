@@ -77,7 +77,7 @@ enum Role {
 
   type Mutation {
     #register(username: String!, password: String!): User!
-    login(email: String!, password: String!): AuthPayload!
+    login(username: String!, password: String!): AuthPayload!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
   
   }

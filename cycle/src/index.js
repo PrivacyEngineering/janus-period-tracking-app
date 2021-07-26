@@ -2,15 +2,44 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './componment/App.css';
 import App from './componment/App';
-
 import reportWebVitals from './componment/reportWebVitals';
-
 import { BrowserRouter } from 'react-router-dom';
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  ApolloLink,
+  concat,
+  HttpLink,
+} from "@apollo/client";
+
+let appJWTToken 
+const httpLink = new HttpLink({uri: 'http://localhost:4000/graphql'})
+const authMiddleware = new ApolloLink((operation, forward)=> {
+//if in local storage
+if (appJWTToken) {
+  operation.setContext({
+  headers: {
+    Authorization: `Bearer ${appJWTToken}`
+  }
+});
+}
+  return forward(operation);
+})
+
+const client = new ApolloClient({
+  link: concat(authMiddleware, httpLink),
+  cache: new InMemoryCache()
+});
+
+
 
 ReactDOM.render(
   <BrowserRouter>
+    <ApolloProvider client={client}>
       <App />
-  </BrowserRouter>
+    </ApolloProvider>
+    </BrowserRouter>
   , document.getElementById('root')
 );
 reportWebVitals();

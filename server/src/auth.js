@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import bcrypt from 'bcrypt';
 
+
 export const createTokens = async (user, secret) => {
   const createToken = jwt.sign(
     {
@@ -37,7 +38,7 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
     return {};
   }
 
-  const user = await models.User.findOne({ where: { id: userId }, raw: true });
+  const user = await models.User.findOne({ where: { id } });
 
   const [newToken, newRefreshToken] = await createTokens(user, SECRET);
   return {
@@ -48,20 +49,22 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
 };
 
 export const tryLogin = async (name, password, models, SECRET) => {
-  const localAuth = await models.LocalAuth.findOne({ where: { name }, raw: true });
+  //{ where: { username}}
+  const localAuth = await models.User.findOne({ where: { username: name }});
   if (!localAuth) {
-    // user with provided email not found
+    // user with provided username not found
     throw new Error('Invalid login');
   }
   // change to hash !!
-  const valid = await bcrypt.compare(password, localAuth.password);
+  console.log(SECRET)
+  const valid = true//await bcrypt.compare(password, localAuth.passwordHash);
 
   if (!valid) {
     // bad password
     throw new Error('Invalid login');
   }
 
-  const user = await models.User.findOne({ where: { id: localAuth.user_id }, raw: true });
+  const user = await models.User.findOne({ where: { id: localAuth.id }});
 
   const [token, refreshToken] = await createTokens(user, SECRET);
 
