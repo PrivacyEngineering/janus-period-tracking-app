@@ -11,6 +11,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+console.log("JWT_SECRET", process.env.JWT_SECRET)
+
 NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info){
     const m = new Map();
     m.set(("Advertiser, Symptom.pain"), {
@@ -107,7 +109,7 @@ models.sequelize.sync().then(_ => {
 })
 .then(_ => {
     //console.log("server listen")
-    return server.listen()}
+    return server.listen({port:8080})}
 ).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
 })
