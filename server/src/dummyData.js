@@ -2,8 +2,8 @@ const dummyUsers = [
     {
         username:"szuboff", 
         firstName:"Shoshana", 
-        lastName: "Zuboff", 
-        email:"shoshana@zuboff.com", 
+        lastName: "Zuboff",
+        email:"shoshana@zuboff.com",
         role:"User", 
         age: 40, 
         contraceptive: "pill"
@@ -108,18 +108,7 @@ const insertDummyData = async function(models) {
           if(count == 0) models.Symptom.create(s);
         })
     }
-    /*
-    if(models.Cycle.count() == 0){
-        for (const c of dummyCycles){
-            models.Cycle.create(c)
-        }
-    } 
-
-    if(models.Symptom.count == 0){
-        for (const s of dummySymptoms){
-            models.Symptom.create(s)
-        }
-    }*/
+    
 }
 
 exports.insertDummyData = insertDummyData
