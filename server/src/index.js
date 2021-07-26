@@ -62,11 +62,14 @@ GeneralizationDirective.prototype.getAnonymizationParameter = function(role, res
     return m.get(lookup);
 }
 
+//needed for generation of JWT tokens
+const SECRET = process.env.JWT_SECRET;
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({req}) => {
-        return {req, models}
+        return {req, models, SECRET}
     },
     schemaDirectives: { 
         generalize: GeneralizationDirective,
