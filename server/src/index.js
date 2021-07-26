@@ -2,9 +2,10 @@ const { ApolloServer } = require('apollo-server');
 const models = require('../models/index');
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
-import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives";
-import { NoiseDirective, GeneralizationDirective } from "graphql-access-control";
+import { NoiseDirective, GeneralizationDirective, HashDirective, hashingParameters } from "graphql-anonym-directives";
 import { insertDummyData } from "./dummyData";
+const { defaultFieldResolver } = require('graphql');
+import { SchemaDirectiveVisitor } from "graphql-tools";
 
 const dotenv = require("dotenv");
 
@@ -12,16 +13,6 @@ dotenv.config();
 
 NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info){
     const m = new Map();
-    m.set(("Researcher, Symptom.pain"), {
-        typeOfDistribution: "normal", 
-        distributionParameters:{
-            mean: 0,
-            standardDeviation: 1,
-        }, 
-        valueParameters:{
-            isInt: false,
-        }
-    });
     m.set(("Advertiser, Symptom.pain"), {
         typeOfDistribution: "normal", 
         distributionParameters:{
@@ -31,7 +22,17 @@ NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args
         valueParameters:{
             isInt: true,
         }
-    });
+    });    
+    m.set(("Researcher, Symptom.pain"), {
+        typeOfDistribution: "normal", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 1,
+        }, 
+        valueParameters:{
+            isInt: false,
+        }
+    });    
     m.set(("Researcher, Cycle.start"),{
         typeOfDistribution: "laplace", 
         distributionParameters:{
@@ -41,25 +42,37 @@ NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args
         valueParameters: {
             addNoiseToUnit: "day"
         }
-    })
+    });
+    
     var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
-    return m.get(lookup);
+    var r = m.get(lookup);
+    if(!r) console.log("no params");
+    return r;
 }
 
 GeneralizationDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info) {
     const m = new Map();
-    m.set(("Researcher, Symptom.symptom"), {
+    m.set(("Advertiser, Symptom.date"), {
         generalizationParameters: {
-            hideCharactersFromPosition: 4,
-        }
-    });
-    m.set(("Advertiser, Symptom.symptom"), {
-        generalizationParameters: {
-            hideCharactersFromPosition: 2,
+            dateUnit: "day"
         }
     });
     var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
     return m.get(lookup);
+}
+
+HashDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info){
+    const m = new Map();
+    m.set(("Advertiser, Symptom.symptom"), hashingParameters.sha256);
+    var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
+    return m.get(lookup);
+}
+
+class DummyDirective extends SchemaDirectiveVisitor{
+    visitFieldDefinition(field){
+        const {resolve = defaultFieldResolver} = field;
+        field.resolve = resolve;
+    }
 }
 
 //needed for generation of JWT tokens
@@ -73,11 +86,10 @@ const server = new ApolloServer({
     },
     schemaDirectives: { 
         generalize: GeneralizationDirective,
-        addNoise: NoiseDirective,
-        isAuthenticated: IsAuthenticatedDirective,
-        hasRole: HasRoleDirective,
-        hasScope: HasScopeDirective
-    }, 
+        noise: NoiseDirective,
+        hash: HashDirective,
+        dummy: DummyDirective
+    },
 })
 
 /**

@@ -29,7 +29,7 @@ const resolvers = {
     getUser: (parent, { id }, { models }) => models.User.findOne({ where: { id } }),
     allUsers: (parent, args, { models }) => models.User.findAll(),
     getSymptom: (parent, { id }, { models }) => models.Symptom.findOne({ where: { id } }),
-    allSymptoms:(parent, args,  { models })  => models.Symptom.findAll(),
+    allSymptoms: (parent, { limit },  { models })  => {return models.Symptom.findAll({limit: limit})},
     /*  async getSymptom (root, { id }, { models }) {
       return models.Symptom.findByPk(id)
     },  */
