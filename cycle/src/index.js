@@ -33,7 +33,14 @@ const client = new ApolloClient({
 });
 
 
+const App2 = () => (
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>
+);
 
+ReactDOM.render(<App2 />, document.getElementById('root'));
+/*
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
@@ -42,4 +49,5 @@ ReactDOM.render(
     </BrowserRouter>
   , document.getElementById('root')
 );
+*/
 reportWebVitals();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Register from './Register';
 import { graphql } from 'react-apollo';
-import { gql, useMutation } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { Button, Input, Checkbox } from 'antd';
 
 class Login extends React.Component {
@@ -16,75 +16,77 @@ class Login extends React.Component {
       });
     }
 
-    handleSubmit = async () => {
+    onSubmit = async () => {
     const response = await this.props.mutate({
       variables: this.state,
     });
     const {token, refreshToken} = response.data.login;
     localStorage.setItem('token', token);
     localStorage.setItem('refreshToken', token);
-    console.log(response);
+    console.log(response); 
 
   }
+  render() {
+  return (
 
-  onSubmit={handleSubmit()}*/
-
-
-    return (
-
-
-<div className='content'>
+      <div className='content'>   
     <div className="login">
 
-      <form >
+      <form onSubmit={this.onSubmit()}>
         <h3>Log in</h3>
 
         <div className="form-group">
           <label htmlFor='username'></label>
 
-      <div className='login'>
-        <form>
-          <label htmlFor='username'>Login</label>
 
           <input
+            className="form-control"
+            placeholder="Enter Username"
             type='text'
             id='username'
             name='username'
-            value={state.username}
-
+            value={this.state.username}
+            onChange={e => this.onChange(e)}
           />
         </div>
 
         <div className="form-group">
 
           <input
+            className="form-control"
+            placeholder="Enter password"
             type='password'
             id='password'
             name='password'
-            value={state.password}
-
+            value={this.state.password}
+            onChange={e => this.onChange(e)}
           />
+        </div>
 
-          <Button onClick={() => this.onSubmit()} type="primary">Login</Button>
+        <div className="subButton">
+        <button type='submit' className="btn btn-dark btn-lg btn-block">Login</button>
+        </div>
 
-          {<p className='error'>Error</p>}
+        {/* {userData.error && <p className='error'>Error</p>} */}
         </form>
         <a href="/register">Register</a>
       </div>
-      )}
-          }
-
-const mutation = gql`
-
-mutation LoginMutation($username: String!, $passwordHash: String) {
+      </div>
+      
+    );
+  }
+}
 
 const mutation = gql`
 mutation($username: String!, $password: String!) {
 	login(username: $username, password: $password) {
     token
     refreshToken
-  }
+  } 
 }
-`;   graphql(mutation)*/
+`;
 
-export default (Login);
+export default graphql(mutation)(Login);
+
+
+

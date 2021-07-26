@@ -73,13 +73,13 @@ const App = () => (
             <img src={footer} alt="footer" />
             <img id="second" src={footer} alt="footer" />
           </div>
-
           <Switch>
             <Route exact path="/home" component={Home}  />
             <Route exact path="/login" component={Login} render={props => <Login {...props} />} />
             <Route path="/user" component={User} />
             <AuthRoute exact path="/auth" component={Auth} />
           </Switch>
+          </BrowserRouter>
         </div>
       </div>
 
