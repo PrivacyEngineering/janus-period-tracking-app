@@ -32,10 +32,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-<<<<<<< Updated upstream
-
-
-=======
 /*
 const App2 = () => (
   <ApolloProvider client={client}>
@@ -45,7 +41,6 @@ const App2 = () => (
 
 ReactDOM.render(<App2 />, document.getElementById('root'));
 */
->>>>>>> Stashed changes
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
@@ -54,8 +49,4 @@ ReactDOM.render(
     </BrowserRouter>
   , document.getElementById('root')
 );
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 reportWebVitals();
