@@ -5,13 +5,23 @@ import Login from './Login';
 import User from './User';
 import logo from './cycle.png';
 import footer from './footer.png';
+import decode from 'jwt-decode';
 import { BrowserRouter, Route, Switch,Redirect } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Auth from './Auth';
-import decode from 'jwt-decode';
 import Navbar from 'react-bootstrap/Navbar'
 
+
+const AuthRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    checkAuth() ? (
+      <Component {...props} />
+    ) : (
+        <Redirect to={{ pathname: '/login' }} />
+      )
+  )} />
+)
 
 const checkAuth = () => {
   const token = localStorage.getItem('token');
@@ -35,18 +45,6 @@ const checkAuth = () => {
 
   return true;
 }
-
-const AuthRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-    checkAuth() ? (
-      <Component {...props} />
-    ) : (
-        <Redirect to={{ pathname: '/login' }} />
-      )
-  )} />
-)
-
-
 
 const App = () => (
       <div className="app">
@@ -73,6 +71,7 @@ const App = () => (
             <img src={footer} alt="footer" />
             <img id="second" src={footer} alt="footer" />
           </div>
+          <BrowserRouter>
           <Switch>
             <Route exact path="/home" component={Home}  />
             <Route exact path="/login" component={Login} render={props => <Login {...props} />} />

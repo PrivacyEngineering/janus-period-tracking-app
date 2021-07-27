@@ -4,9 +4,9 @@ import './componment/App.css';
 import App from './componment/App';
 import reportWebVitals from './componment/reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/react-hooks';
 import {
   ApolloClient,
-  ApolloProvider,
   InMemoryCache,
   ApolloLink,
   concat,
@@ -36,7 +36,7 @@ const client = new ApolloClient({
 const App2 = () => (
   <ApolloProvider client={client}>
     <App />
-  </ApolloProvider>
+    </ApolloProvider>
 );
 
 ReactDOM.render(<App2 />, document.getElementById('root'));
