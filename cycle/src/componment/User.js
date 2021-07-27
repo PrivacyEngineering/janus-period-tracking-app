@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './user.css';
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useLazyQuery  } from '@apollo/client';
+
 
 const GET_USER = gql`
 query user($id: Int!){

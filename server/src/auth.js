@@ -50,7 +50,13 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
 
 export const tryLogin = async (name, password, models, SECRET) => {
   //{ where: { username}}
+<<<<<<< Updated upstream
   const localAuth = await models.User.findOne({ where: { username: name }});
+=======
+  console.log(name)
+  const localAuth = await models.User.findOne({where : {username : name}});
+  console.log(name)
+>>>>>>> Stashed changes
   if (!localAuth) {
     // user with provided username not found
     throw new Error('Invalid login');
@@ -69,8 +75,7 @@ export const tryLogin = async (name, password, models, SECRET) => {
   const [token, refreshToken] = await createTokens(user, SECRET);
 
   return {
-    token,
-    refreshToken,
+    token
   };
 };
  
