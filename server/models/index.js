@@ -8,6 +8,7 @@ const models = {
   User: require("./user")(sequelize, Sequelize.DataTypes),
   Cycle: require("./cycle")(sequelize, Sequelize.DataTypes),
   Symptom: require("./symptom")(sequelize, Sequelize.DataTypes),
+  LocalAuth: require("./localAuth")(sequelize, Sequelize.DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {

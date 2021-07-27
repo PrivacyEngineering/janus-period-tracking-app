@@ -50,7 +50,7 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
 
 export const tryLogin = async (name, password, models, SECRET) => {
   //{ where: { username}}
-  const localAuth = await models.User.findOne({ where: { username }});
+  const localAuth = await models.localAuth.findOne({ where: { username }});
   if (!localAuth) {
     // user with provided username not found
     throw new Error('Invalid login');
