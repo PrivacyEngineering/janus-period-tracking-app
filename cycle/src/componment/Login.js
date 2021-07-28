@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './login.css';
 import { gql, useMutation } from '@apollo/client';
 import jwtDecode from "jwt-decode";
+import { useHistory } from 'react-router-dom';
 
 const LOGIN = gql`
   mutation loginMutation($username: String!, $password: String!) {
@@ -13,11 +14,16 @@ const LOGIN = gql`
 
 const Login =  () => {
   // Sets a state variable to save the current inputValue
-  const [inputVal, setValue] = useState(" ");
+  const [username, setValue] = useState(" ");
   const [password, passwordSetValue] = useState(" ");
   
-  const [login, {data: dataA}] = useMutation(LOGIN, { variables: { username: inputVal, password : password}});
-  
+  const [login, {data: dataA}] = useMutation(LOGIN, { variables: { username: username, password : password}});
+  const history = useHistory();
+
+  const redirect = () => {
+    history.push('/user')
+  }
+
   const onSubmit = async () => {
     try {
       await login();
@@ -36,17 +42,39 @@ const Login =  () => {
   return (
     <div className="content">
       <div className="userPage">
-        <h2>User Page</h2>
+        <h2>Login</h2>
 
-        <div className="btnContainer">
-          <input placeholder="Enter ID" onChange={e => setValue(e.target.value)} />
-          <input placeholder="Enter ID" onChange={e => passwordSetValue(e.target.value)} />
-          <button onClick={(e) => {e.preventDefault();onSubmit(); onSubmit()}}>
-            Get user data by ID.
-          </button>
-          <pre>
-            {JSON.stringify(dataA, null, "  ")}
-          </pre>
+        <div className="form-group">
+          <label htmlFor='username'></label>
+          <input
+            className="form-control"
+            placeholder="Enter Username"
+            type='text'
+            id='username'
+            name='username'
+            onChange={e => setValue(e.target.value)}
+          />
+          <div className="form-group">
+    
+
+
+          <input
+            type='password'
+            className="form-control"
+            placeholder="Enter Password"
+            id='password'
+            name='password'
+            onChange={e => passwordSetValue(e.target.value)}
+          />
+        </div>
+
+        <div className="subButton">
+          
+          <button className="btn btn-dark btn-lg btn-block" onClick={(e) => {e.preventDefault();onSubmit(); redirect();}}>
+          Login
+            </button>
+         </div>
+         <a href="/register">Register</a>
         </div>
 
        
