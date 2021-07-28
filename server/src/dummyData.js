@@ -35,6 +35,23 @@ const dummyUsers = [
         age: 30, 
         contraceptive: "condome"
     },
+
+    {
+        username:"mzuckerberg", 
+        firstName:"Mark", 
+        lastName: "Zuckerberg", 
+        email:"m@zuckerberg.com", 
+        role:"Advertiser", 
+        age: 37
+    },
+    {
+        username:"ccriado-perez", 
+        firstName:"Caroline", 
+        lastName: "Criado-Perez", 
+        email:"c@criado-perez.de", 
+        role:"Researcher", 
+        age: 37
+    },
 ]
 
 const dummyCycles = [
