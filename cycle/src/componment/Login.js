@@ -17,7 +17,7 @@ const Login =  () => {
   const [username, setValue] = useState(" ");
   const [password, passwordSetValue] = useState(" ");
   
-  const [login, {data: dataA}] = useMutation(LOGIN, { variables: { username: username, password : password}});
+  const [login, {data: dataA, error: error}] = useMutation(LOGIN, { variables: { username: username, password : password}});
   const history = useHistory();
 
   const redirect = () => {
@@ -26,7 +26,11 @@ const Login =  () => {
 
   const onSubmit = async () => {
     try {
+      console.log(dataA);
       await login();
+      console.log(dataA);
+      console.log(error);
+
       const { token } = dataA.login;
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", token);
@@ -70,7 +74,7 @@ const Login =  () => {
 
         <div className="subButton">
           
-          <button className="btn btn-dark btn-lg btn-block" onClick={(e) => {e.preventDefault();onSubmit(); redirect();}}>
+          <button className="btn btn-dark btn-lg btn-block" onClick={(e) => {e.preventDefault();onSubmit(); }}>
           Login
             </button>
          </div>

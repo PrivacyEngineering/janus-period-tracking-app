@@ -102,13 +102,35 @@ const User = () => {
   // Hook for quering all related userData by an ID
   const [getUserData, { data: dataA }] = useLazyQuery(
     GET_USER,
-    { variables: { id: inputVal } }
+    { variables: { id: inputVal }, context: {
+      headers: {
+        "Authorization": localStorage.getItem("token")
+      }
+    }}
   );
 
   // Hooks for quering AllUsers, AllSymptom, AllCycles  
-  const [getAllUser, { data: dataB }] = useLazyQuery(GET_ALL_USERS);
-  const [allSymptoms, { data: dataC }] = useLazyQuery(GET_ALL_SYMPTOM);
-  const [allCycles, { data: dataD }] = useLazyQuery(GET_ALL_CYCLES);
+  const [getAllUser, { data: dataB }] = useLazyQuery(GET_ALL_USERS, {
+    context: {
+      headers: {
+        "Authorization": localStorage.getItem("token")
+      }
+    }
+  });
+  const [allSymptoms, { data: dataC }] = useLazyQuery(GET_ALL_SYMPTOM, {
+    context: {
+      headers: {
+        "Authorization": localStorage.getItem("token")
+      }
+    }
+  });
+  const [allCycles, { data: dataD }] = useLazyQuery(GET_ALL_CYCLES, {
+    context: {
+      headers: {
+        "Authorization": localStorage.getItem("token")
+      }
+    }
+  });
 
   // NOT USED: could be used for quering only one symptom by ID
   const [getSymptom, { data: dataE }] = useLazyQuery(

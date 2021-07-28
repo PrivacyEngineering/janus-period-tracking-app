@@ -13,7 +13,7 @@ import {
   HttpLink,
 } from "@apollo/client";
 
-let appJWTToken 
+let appJWTToken = localStorage.getItem("token")
 const httpLink = new HttpLink({uri: 'http://localhost:4000/graphql'})
 const authMiddleware = new ApolloLink((operation, forward)=> {
 //if in local storage

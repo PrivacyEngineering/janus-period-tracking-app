@@ -3,7 +3,7 @@ const models = require('../models/index');
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 import { IsAuthenticatedDirective, HasRoleDirective, HasScopeDirective } from "graphql-auth-directives";
-import { NoiseDirective, GeneralizationDirective } from "graphql-access-control";
+import { NoiseDirective, GeneralizationDirective } from "graphql-anonym-directives";
 import { insertDummyData } from "./dummyData";
 
 const dotenv = require("dotenv");
@@ -12,16 +12,6 @@ dotenv.config();
 
 NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info){
     const m = new Map();
-    m.set(("Researcher, Symptom.pain"), {
-        typeOfDistribution: "normal", 
-        distributionParameters:{
-            mean: 0,
-            standardDeviation: 1,
-        }, 
-        valueParameters:{
-            isInt: false,
-        }
-    });
     m.set(("Advertiser, Symptom.pain"), {
         typeOfDistribution: "normal", 
         distributionParameters:{
@@ -32,18 +22,60 @@ NoiseDirective.prototype.getAnonymizationParameter = function(role, result, args
             isInt: true,
         }
     });
+    m.set(("Researcher, Symptom.pain"),{
+        typeOfDistribution: "laplace", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 0.25,
+        }, 
+        valueParameters: {
+            isInt: false
+        }
+    });
+    m.set(("User, Symptom.pain"),{
+        typeOfDistribution: "laplace", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 0,
+        }, 
+        valueParameters: {
+            isInt: false
+        }
+    });
+    m.set(("Advertiser, Cycle.start"), {
+        typeOfDistribution: "normal", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 2,
+        }, 
+        valueParameters:{
+            addNoiseToUnit: "day",
+        }
+    });
     m.set(("Researcher, Cycle.start"),{
         typeOfDistribution: "laplace", 
         distributionParameters:{
-            mean: 1,
-            standardDeviation: 1.5,
+            mean: 0,
+            standardDeviation: 0.25,
         }, 
         valueParameters: {
-            addNoiseToUnit: "day"
+            addNoiseToUnit: "hour"
         }
-    })
+    });
+    m.set(("User, Cycle.start"), {
+        typeOfDistribution: "normal", 
+        distributionParameters:{
+            mean: 0,
+            standardDeviation: 0,
+        }, 
+        valueParameters:{
+            addNoiseToUnit: "day",
+        }
+    });
     var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
-    return m.get(lookup);
+    const newLocal = m.get(lookup);
+    console.log(lookup, newLocal)
+    return newLocal;
 }
 
 GeneralizationDirective.prototype.getAnonymizationParameter = function(role, result, args, context, info) {
@@ -53,13 +85,21 @@ GeneralizationDirective.prototype.getAnonymizationParameter = function(role, res
             hideCharactersFromPosition: 4,
         }
     });
+    m.set(("User, Symptom.symptom"), {
+        generalizationParameters: {
+            hideCharactersFromPosition: 40,
+        }
+    });
     m.set(("Advertiser, Symptom.symptom"), {
         generalizationParameters: {
             hideCharactersFromPosition: 2,
+            numberOfHideCharacters: 3
         }
     });
     var lookup = role + ", " + info.parentType.name + "."+ info.fieldName
-    return m.get(lookup);
+    const newLocal = m.get(lookup);
+    console.log(lookup, newLocal)
+    return newLocal;
 }
 
 //needed for generation of JWT tokens
