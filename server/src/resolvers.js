@@ -56,8 +56,8 @@ const resolvers = {
    }
  },
  Mutation: {
-  login: async (parent, { name, password }, { models, SECRET }) =>
-    tryLogin(name, password, models, SECRET),
+  login: (parent, { username, password }, { models, SECRET }) =>
+    tryLogin(username, password, models, SECRET),
   
   refreshTokens: (parent, { token, refreshToken }, { models, SECRET }) =>
     refreshTokens(token, refreshToken, models, SECRET),

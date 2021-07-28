@@ -76,9 +76,9 @@ const App = () => (
 
           <Switch>
             <Route exact path="/home" component={Home}  />
-            <Route exact path="/login" component={Login} render={props => <Login {...props} />} />
-            <Route exact path="/user" component={User} />
-            <AuthRoute exact path="/auth" component={Auth} />
+            <Route exact path="/login" component={Login} />
+            
+            <AuthRoute exact path="/user" component={User} />
           </Switch>
         </div>
       </div>

@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-//import { graphql } from 'react-apollo';
 import './login.css';
 import { gql, useMutation } from '@apollo/client';
-import { useHistory } from 'react-router';
+import jwtDecode from "jwt-decode";
 
-function Login({ props }) {
-  const history = useHistory();
-  const [username, usernameSetValue] = useState("szuboff");
-  const [password, passwordSetValue] = useState(" ");
-  console.log(username)
-  const LOGIN = gql`
+const LOGIN = gql`
   mutation loginMutation($username: String!, $password: String!) {
 	login(username: $username, password: $password) {
     token
@@ -17,80 +11,51 @@ function Login({ props }) {
 }
 `;
 
-const test = gql`
-  mutation test{
-	  test {
-      token
-  } 
-}
-`;
+const Login =  () => {
+  // Sets a state variable to save the current inputValue
+  const [inputVal, setValue] = useState(" ");
+  const [password, passwordSetValue] = useState(" ");
   
-    const [login] = useMutation(LOGIN, { variables: { username, password } });
-    //const [login, error, data] = useMutation(test);
-    
-  function onSubmit (){
-    const token = " "
-    const response = login()
-    localStorage.setItem('token', login.token);
-    history.push('/');
-    
-
-  }
+  const [login, {data: dataA}] = useMutation(LOGIN, { variables: { username: inputVal, password : password}});
   
-   return (
+  const onSubmit = async () => {
+    try {
+      await login();
+      const { token } = dataA.login;
+      localStorage.setItem("token", token);
+      localStorage.setItem("refreshToken", token);
+      console.log("login worked!");
+      console.log(jwtDecode(token));
+    } catch (e) {
+      console.log("login failed!");
+      console.log(e);
+    }
+  };
 
 
-<div className='content'>   
-    <div className="login">
+  return (
+    <div className="content">
+      <div className="userPage">
+        <h2>User Page</h2>
 
-      <form >
-        <h3>Log in</h3>
-
-        <div className="form-group">
-          <label htmlFor='username'></label>
-
-
-          <input
-            className="form-control"
-            placeholder="Enter Username"
-            type='text'
-            id='username'
-            name='username'
-            value={username}
-            onChange={e => usernameSetValue(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-    
-
-
-          <input
-            type='password'
-            id='password'
-            name='password'
-            value={password}
-            onChange={e => passwordSetValue(e.target.value)}
-          />
-        </div>
-        <div className="subButton">
-        <button className="btn btn-dark btn-lg btn-block" onClick={() => { onSubmit ()}}>
-        Login
+        <div className="btnContainer">
+          <input placeholder="Enter ID" onChange={e => setValue(e.target.value)} />
+          <input placeholder="Enter ID" onChange={e => passwordSetValue(e.target.value)} />
+          <button onClick={(e) => {e.preventDefault();onSubmit(); onSubmit()}}>
+            Get user data by ID.
           </button>
-          </div>
-          
-        </form>
-        <a href="/register">Register</a>
+          <pre>
+            {JSON.stringify(dataA, null, "  ")}
+          </pre>
+        </div>
+
+       
+
+       
       </div>
-      </div>
-      
-    )
-  }
+    </div>
+    
+  );
+}
 
-
-
-
-export default (Login);
-
-
-
+export default Login;
